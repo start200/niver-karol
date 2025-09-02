@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Feliz Aniversário, Karol! 🎉❤️</title>
+  <meta name="color-scheme" content="light dark" />
+  <style>
+    :root{
+      --bg: #0b0a10;               /* fundo escuro elegante */
+      --panel: #131226;            /* painéis */
+      --text: #f5f7fb;             /* texto principal */
+      --muted: #b9c0d9;            /* texto secundário */
+      --rose: #fb7185;             /* rose-400 */
+      --pink: #ec4899;             /* pink-500 */
+      --violet: #8b5cf6;           /* violet-500 */
+      --glow: 0 10px 30px rgba(236,72,153,.35);
+      --radius: 22px;
+    }
+    *{box-sizing: border-box}
+    html, body{height:100%}
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial;
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% 10%, rgba(236,72,153,.10), transparent 55%),
+        radial-gradient(900px 500px at 90% 90%, rgba(139,92,246,.12), transparent 55%),
+        var(--bg);
+      display:flex; align-items:center; justify-content:center; padding: clamp(12px, 3vw, 28px);
+    }
+
+    .wrap{ width:min(1200px, 100%); display:grid; gap:18px; grid-template-columns: 2fr 1fr; }
+    @media (max-width: 980px){ .wrap{ grid-template-columns: 1fr; } }
+
+    /* ======= TOP BAR ======= */
+    .topbar{
+      grid-column: 1 / -1; border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.08);
+      background: linear-gradient(120deg, rgba(236,72,153,.15), rgba(139,92,246,.15));
+      padding: 14px 18px; display:flex; align-items:center; justify-content:space-between; gap:10px;
+      box-shadow: var(--glow);
+    }
+    .title{ font-weight:800; letter-spacing:.3px; font-size: clamp(22px, 3.2vw, 32px); display:flex; align-items:center; gap:10px; }
+    .title .heart{ filter: drop-shadow(0 6px 18px rgba(236,72,153,.4)); }
+    .actions{ display:flex; gap:10px; flex-wrap:wrap; }
+    .btn{
+      appearance:none; border:1px solid rgba(255,255,255,.12);
+      background: linear-gradient(135deg, rgba(251,113,133,.18), rgba(139,92,246,.18));
+      color:var(--text); padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:700;
+      transition: .15s; box-shadow: var(--glow);
+    }
+    .btn:hover{ transform: translateY(-1px) scale(1.02); }
+
+    /* ======= CARD BASE ======= */
+    .card{ border-radius: var(--radius); overflow:hidden; border:1px solid rgba(255,255,255,.08); box-shadow: 0 20px 60px rgba(0,0,0,.35); }
+    .card header{
+      padding:14px 16px; display:flex; align-items:center; justify-content:space-between;
+      background: linear-gradient(120deg, rgba(251,113,133,.12), rgba(139,92,246,.12));
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .label{ color: var(--muted); font-weight:700; letter-spacing:.3px; text-transform: uppercase; font-size:.8rem; }
+
+    /* ======= CARROSSEL ======= */
+    .carousel{ position:relative; height: 520px; background: #0f1124; }
+    .track{ display:flex; height:100%; transition: transform .7s cubic-bezier(.22,.9,.28,1); }
+    .slide{ min-width:100%; height:100%; position:relative; display:grid; place-items:center; }
+    .slide img{ width:100%; height:100%; object-fit:cover; filter: contrast(1.06) saturate(1.08); }
+    .overlayHeart{ position:absolute; inset:0; pointer-events:none; background:
+        radial-gradient(600px 300px at 12% 15%, rgba(251,113,133,.12), transparent 60%),
+        radial-gradient(600px 300px at 88% 85%, rgba(139,92,246,.12), transparent 60%);
+    }
+    .caption{ position:absolute; left:16px; right:16px; bottom:16px; padding:10px 14px; border-radius:14px; backdrop-filter: blur(6px);
+      background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.55)); font-weight:700; }
+    .ctrl{ position:absolute; top:50%; transform:translateY(-50%); background: rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.1); width:46px; height:46px; border-radius:12px; display:grid; place-items:center; cursor:pointer; transition:.18s; }
+    .ctrl:hover{ background: rgba(0,0,0,.6); transform:translateY(-50%) scale(1.05); }
+    .prev{ left:12px } .next{ right:12px }
+    .dots{ position:absolute; left:0; right:0; bottom:10px; display:flex; gap:8px; justify-content:center; }
+    .dot{ width:10px; height:10px; border-radius:999px; background:rgba(255,255,255,.35); border:1px solid rgba(255,255,255,.55); cursor:pointer; transition:.18s; }
+    .dot.active{ background: linear-gradient(135deg, var(--rose), var(--violet)); border-color: transparent; transform: scale(1.15); }
+
+    /* ======= PLAYER ======= */
+    .player{ background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); }
+    .playerInner{ padding:16px; display:flex; flex-direction:column; gap:12px; }
+    audio{ width:100%; height:44px; filter: saturate(1.1); }
+    .playlist{ max-height: 340px; overflow:auto; display:flex; flex-direction:column; gap:10px; padding-right:6px; }
+    .trackItem{ padding:10px 12px; border-radius:14px; background: rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); display:flex; align-items:center; justify-content:space-between; gap:10px; cursor:pointer; }
+    .trackItem:hover{ background: rgba(255,255,255,.07); }
+    .trackItem.active{ background: linear-gradient(135deg, rgba(251,113,133,.18), rgba(139,92,246,.18)); border-color: rgba(255,255,255,.14); }
+    .pill{ font-size:.75rem; padding:4px 8px; border-radius:999px; color:#0b1020; background: linear-gradient(135deg, #fb7185, #8b5cf6); font-weight:800; }
+
+    /* ======= CARTA/MODAL ======= */
+    .modal{ position: fixed; inset:0; display:none; place-items:center; background: rgba(6,6,10,.6); backdrop-filter: blur(6px); z-index: 50; }
+    .modal.show{ display:grid; }
+    .letter{ width:min(720px, 92vw); border-radius: 18px; border:1px solid rgba(255,255,255,.12); background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03)); padding: 18px 16px; box-shadow: var(--glow); }
+    .letter header{ display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom: 8px; }
+    .close{ appearance:none; border:1px solid rgba(255,255,255,.14); background: rgba(0,0,0,.35); color:var(--text); padding:8px 10px; border-radius:10px; cursor:pointer; }
+    .letter h2{ margin:.2rem 0 .6rem; font-size: clamp(20px, 2.8vw, 26px); }
+    .letter p{ color: var(--muted); line-height:1.7; font-size: 1.02rem; }
+
+    /* ======= CORAÇÕES FLUTUANTES ======= */
+    .hearts{ position: fixed; left:0; right:0; pointer-events:none; top:0; bottom:0; overflow:hidden; z-index: 1; }
+    .hearts span{ position:absolute; bottom:-50px; font-size: 14px; animation: rise var(--t) linear infinite; color: rgba(236,72,153,.7); filter: drop-shadow(0 6px 14px rgba(236,72,153,.4)); }
+    @keyframes rise{ to{ transform: translateY(-105vh) translateX(var(--x)); opacity:.1; } }
+
+    /* ======= CONFETTI CANVAS ======= */
+    #confetti{ position: fixed; inset:0; pointer-events:none; z-index: 40; display:none; }
+
+    /* ======= RODAPÉ ======= */
+    .footer{ grid-column:1 / -1; text-align:center; color:var(--muted); font-size:.9rem; margin-top:2px; }
+  </style>
+</head>
+<body>
+  <canvas id="confetti"></canvas>
+  <div class="hearts" aria-hidden="true" id="hearts"></div>
+
+  <main class="wrap">
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="title">
+        <svg class="heart" width="28" height="28" viewBox="0 0 24 24" fill="#ec4899" aria-hidden="true"><path d="M12 21s-6.716-4.236-9.293-6.813C.635 12.116.635 8.884 2.707 6.813c1.562-1.562 4.095-1.8 5.954-.434L12 9.12l3.339-2.742c1.86-1.366 4.392-1.128 5.954.434 2.072 2.071 2.072 5.303 0 7.374C18.716 16.764 12 21 12 21z"/></svg>
+        Feliz Aniversário, Karol!
+      </div>
+      <div class="actions">
+        <button class="btn" id="btnMensagem">Abrir mensagem 💌</button>
+        <button class="btn" id="btnFesta" title="Ativa confetes e corações">Modo Festa 🎊</button>
+        <button class="btn" id="btnTelaCheia">Tela cheia ⛶</button>
+      </div>
+    </div>
+
+    <!-- Carrossel -->
+    <section class="card">
+      <header>
+        <div class="label">Momentos com a Karol</div>
+        <div id="status" class="label" aria-live="polite">Auto • 5s</div>
+      </header>
+      <div class="carousel" id="carousel" tabindex="0" aria-roledescription="carrossel">
+        <div class="track" id="track">
+          <!-- Substitua pelas suas fotos -->
+          <figure class="slide"><img src="media/foto1.jpg" alt="Karol sorrindo"/><figcaption class="caption">Seu sorriso ilumina tudo ✨</figcaption></figure>
+          <figure class="slide"><img src="media/foto2.jpg" alt="Vocês dois juntos"/><figcaption class="caption">Nós dois, do jeitinho que eu amo 💖</figcaption></figure>
+          <figure class="slide"><img src="media/foto3.jpg" alt="Momento especial"/><figcaption class="caption">Mais um momento inesquecível 📸</figcaption></figure>
+          <figure class="slide"><img src="media/foto4.jpg" alt="Karol linda"/><figcaption class="caption">Karol, você é única 💎</figcaption></figure>
+        </div>
+        <div class="overlayHeart"></div>
+        <button class="ctrl prev" id="prev" aria-label="Anterior">◀</button>
+        <button class="ctrl next" id="next" aria-label="Próxima">▶</button>
+        <div class="dots" id="dots"></div>
+      </div>
+    </section>
+
+    <!-- Player -->
+    <section class="card player" aria-label="Música">
+      <header>
+        <div class="label">Trilha da Karol</div>
+        <span class="label" id="nowPlaying">—</span>
+      </header>
+      <div class="playerInner">
+        <audio id="audio" controls preload="metadata"></audio>
+        <div class="playlist" id="playlist" role="listbox" aria-label="Playlist de aniversário"></div>
+      </div>
+    </section>
+
+    <div class="footer">Feito com muito carinho 💗</div>
+  </main>
+
+  <!-- Modal Carta -->
+  <div class="modal" id="modal">
+    <div class="letter">
+      <header>
+        <span class="label">Carta para a aniversariante</span>
+        <button class="close" id="closeModal">Fechar ✕</button>
+      </header>
+      <h2>Karol, meu amor,</h2>
+      <p>
+        Hoje o mundo ficou mais bonito porque é o seu dia. Obrigado por ser luz,
+        por me inspirar e por transformar qualquer lugar em lar quando você está.
+        Que este novo ciclo venha cheio de sorrisos, saúde e sonhos realizados.
+      </p>
+      <p>
+        Eu te celebro hoje e sempre. Feliz aniversário! 🎂✨
+      </p>
+      <p style="margin-top:14px;font-weight:700">— Com todo meu amor.</p>
+    </div>
+  </div>
+
+  <script>
+    /* ========= CARROSSEL ========= */
+    (function(){
+      const track = document.getElementById('track');
+      const slides = Array.from(track.children);
+      const prev = document.getElementById('prev');
+      const next = document.getElementById('next');
+      const dots = document.getElementById('dots');
+      const status = document.getElementById('status');
+      const carousel = document.getElementById('carousel');
+      let i = 0; const AUTOPLAY = 5000; let timer; let auto = true;
+
+      function buildDots(){
+        dots.innerHTML = '';
+        slides.forEach((_,k)=>{
+          const d = document.createElement('button');
+          d.className = 'dot' + (k===i ? ' active' : '');
+          d.setAttribute('aria-label','Ir para slide ' + (k+1));
+          d.addEventListener('click', ()=>go(k, true));
+          dots.appendChild(d);
+        });
+      }
+      function go(n, pause=false){
+        i = (n + slides.length) % slides.length;
+        track.style.transform = `translateX(${-i*100}%)`;
+        Array.from(dots.children).forEach((el,idx)=> el.classList.toggle('active', idx===i));
+        if (pause) stop();
+      }
+      function play(){ auto=true; clearInterval(timer); timer=setInterval(()=>go(i+1), AUTOPLAY); status.textContent = 'Auto • ' + (AUTOPLAY/1000) + 's'; }
+      function stop(){ auto=false; clearInterval(timer); status.textContent = 'Pausado'; }
+
+      prev.addEventListener('click', ()=>go(i-1, true));
+      next.addEventListener('click', ()=>go(i+1, true));
+      carousel.addEventListener('mouseenter', stop);
+      carousel.addEventListener('mouseleave', ()=>auto && play());
+      window.addEventListener('keydown', (e)=>{
+        if (e.key==='ArrowLeft') go(i-1, true);
+        if (e.key==='ArrowRight') go(i+1, true);
+        if (e.key===' ') { e.preventDefault(); auto?stop():play(); }
+      });
+
+      // swipe
+      let startX=0; carousel.addEventListener('touchstart', e=>{ startX=e.touches[0].clientX; }, {passive:true});
+      carousel.addEventListener('touchend', e=>{ const dx=e.changedTouches[0].clientX-startX; if (Math.abs(dx)>40) (dx<0? go(i+1,true) : go(i-1,true)); });
+
+      buildDots(); go(0); play();
+    })();
+
+    /* ========= PLAYER ========= */
+    (function(){
+      // Personalize a playlist com as músicas de vocês
+      const tracks = [
+        { title: 'Nossa Canção', file: 'media/musica1.mp3' },
+        { title: 'Pra Dançar Juntinhos', file: 'media/musica2.mp3' },
+        { title: 'Karol, Meu Amor', file: 'media/musica3.mp3' }
+      ];
+      const audio = document.getElementById('audio');
+      const playlist = document.getElementById('playlist');
+      const nowPlaying = document.getElementById('nowPlaying');
+      let cur = 0;
+
+      function render(){
+        playlist.innerHTML='';
+        tracks.forEach((t,idx)=>{
+          const row = document.createElement('div');
+          row.className = 'trackItem' + (idx===cur?' active':'');
+          row.innerHTML = `<div>${t.title}</div><span class="pill">${t._dur || 'MP3'}</span>`;
+          row.addEventListener('click', ()=>load(idx, true));
+          playlist.appendChild(row);
+        });
+        nowPlaying.textContent = 'Tocando: ' + tracks[cur].title;
+      }
+      function load(n, auto=false){
+        cur = (n + tracks.length) % tracks.length;
+        audio.src = tracks[cur].file; render(); if (auto) audio.play().catch(()=>{});
+      }
+      audio.addEventListener('ended', ()=> load(cur+1, true));
+      audio.addEventListener('loadedmetadata', ()=>{
+        const s = Math.floor(audio.duration||0); const mm=String(Math.floor(s/60)).padStart(2,'0'); const ss=String(s%60).padStart(2,'0');
+        tracks[cur]._dur = `${mm}:${ss}`; render();
+      });
+      // atalhos: J/K/L
+      window.addEventListener('keydown', (e)=>{
+        const k=e.key.toLowerCase(); if(k==='j') load(cur-1, true); if(k==='l') load(cur+1, true); if(k==='k'){ audio.paused?audio.play().catch(()=>{}):audio.pause(); }
+      });
+      render(); load(0);
+    })();
+
+    /* ========= MODAL CARTA ========= */
+    (function(){
+      const modal = document.getElementById('modal');
+      const open = document.getElementById('btnMensagem');
+      const close = document.getElementById('closeModal');
+      open.addEventListener('click', ()=> modal.classList.add('show'));
+      close.addEventListener('click', ()=> modal.classList.remove('show'));
+      modal.addEventListener('click', (e)=>{ if(e.target===modal) modal.classList.remove('show'); });
+    })();
+
+    /* ========= CORAÇÕES FLUTUANTES ========= */
+    (function(){
+      const root = document.getElementById('hearts');
+      function spawn(){
+        const s = document.createElement('span'); s.textContent='❤';
+        s.style.left = Math.random()*100 + 'vw';
+        s.style.fontSize = (12 + Math.random()*26) + 'px';
+        s.style.setProperty('--t', (8 + Math.random()*10) + 's');
+        s.style.setProperty('--x', (Math.random()*80-40) + 'px');
+        root.appendChild(s);
+        setTimeout(()=> s.remove(), 20000);
+      }
+      // coração constante, mais forte no modo festa
+      let base = setInterval(spawn, 700);
+      window.__heartsBoost = (on)=>{ clearInterval(base); base = setInterval(spawn, on? 220 : 700); };
+    })();
+
+    /* ========= CONFETTI (modo festa) ========= */
+    ;(function(){
+      const canvas = document.getElementById('confetti');
+      const ctx = canvas.getContext('2d');
+      let W=0,H=0, conf=[], running=false, raf;
+      function resize(){ W=canvas.width=innerWidth; H=canvas.height=innerHeight; }
+      addEventListener('resize', resize); resize();
+      function spawn(n=120){
+        for(let i=0;i<n;i++){
+          conf.push({
+            x: Math.random()*W,
+            y: -20 - Math.random()*H,
+            r: 4 + Math.random()*6,
+            c: ['#fb7185','#ec4899','#8b5cf6','#f472b6'][Math.floor(Math.random()*4)],
+            vx: -1 + Math.random()*2,
+            vy: 1 + Math.random()*2.5,
+            a: Math.random()*Math.PI*2,
+            s: .02 + Math.random()*.04
+          });
+        }
+      }
+      function draw(){
+        ctx.clearRect(0,0,W,H);
+        conf.forEach(p=>{
+          p.x += p.vx + Math.sin(p.a)*.6; p.y += p.vy; p.a += p.s;
+          ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a);
+          ctx.fillStyle = p.c; ctx.fillRect(-p.r, -p.r, p.r*2, p.r*2);
+          ctx.restore();
+        });
+        conf = conf.filter(p=> p.y < H+30);
+        if(running){ raf=requestAnimationFrame(draw); }
+      }
+      function start(){ if(running) return; running=true; canvas.style.display='block'; spawn(200); draw(); window.__heartsBoost(true); }
+      function stop(){ running=false; canvas.style.display='none'; cancelAnimationFrame(raf); conf=[]; window.__heartsBoost(false); }
+      window.__confetti = { start, stop };
+    })();
+
+    /* ========= AÇÕES TOPBAR ========= */
+    (function(){
+      const btnFesta = document.getElementById('btnFesta');
+      let festa = false; btnFesta.addEventListener('click', ()=>{ festa=!festa; festa? window.__confetti.start() : window.__confetti.stop(); btnFesta.textContent = festa? 'Parar Festa ✨' : 'Modo Festa 🎊'; });
+
+      const btnFS = document.getElementById('btnTelaCheia');
+      btnFS.addEventListener('click', ()=>{
+        const el = document.documentElement; const isFS = document.fullscreenElement; if(!isFS){ el.requestFullscreen?.(); } else { document.exitFullscreen?.(); }
+      });
+    })();
+  </script>
+</body>
+</html>
